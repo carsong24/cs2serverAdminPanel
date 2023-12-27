@@ -1,0 +1,36 @@
+{
+  "name": "notsureyet",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@auth/prisma-adapter": "^1.0.12",
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.15.1",
+    "@prisma/client": "^5.7.1",
+    "bcrypt": "^5.1.1",
+    "date-fns": "^3.0.6",
+    "js-cookie": "^3.0.5",
+    "jsonwebtoken": "^9.0.2",
+    "next": "14.0.4",
+    "next-auth": "^4.24.5",
+    "react": "^18",
+    "react-dom": "^18",
+    "swr": "^2.2.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.4",
+    "prisma": "^5.7.1",
+    "typescript": "^5"
+  }
+}
