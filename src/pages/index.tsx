@@ -15,7 +15,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>{status === 'authenticated' ? "Home" : "Login"}</title>
+        <title>Home</title>
       </Head>
     <Grid container width={"100%"}>
       <Today/>
