@@ -16,6 +16,9 @@ export default function Profile() {
 
     return (
         <>
+        <Head>
+            <title>{session?.user?.name}</title>
+        </Head>
             <Typography>
                 {session?.user?.email}
             </Typography>
