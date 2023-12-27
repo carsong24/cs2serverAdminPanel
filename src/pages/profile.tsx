@@ -7,6 +7,7 @@ import Cookies from 'js-cookie'
 import { Button, Typography } from "@mui/material"
 import { useRouter } from "next/router"
 import { useSession } from "next-auth/react"
+import Head from "next/head"
 
 export default function Profile() {
     const router = useRouter()
@@ -15,6 +16,9 @@ export default function Profile() {
 
     return (
         <>
+        <Head>
+            <title>{session?.user?.name}</title>
+        </Head>
             <Typography>
                 {session?.user?.email}
             </Typography>

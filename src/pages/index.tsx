@@ -3,6 +3,7 @@
 import { Box, Grid } from "@mui/material";
 import Today from "./renderPost";
 import { useSession } from "next-auth/react";
+import Head from "next/head";
 
 
 
@@ -10,12 +11,15 @@ import { useSession } from "next-auth/react";
 export default function Home() {
 
   const {data: session, status} = useSession()
-  console.log(session, status)
+
   return (
-    
+    <>
+      <Head>
+        <title>{status === 'authenticated' ? "Home" : "Login"}</title>
+      </Head>
     <Grid container width={"100%"}>
       <Today/>
     </Grid>
-      
+    </>
   )
 }

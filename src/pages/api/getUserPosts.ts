@@ -11,7 +11,6 @@ export default async function getUserPosts(req: NextApiRequest, res: NextApiResp
 
         const token = await getToken({ req })
         if (token) {
-            console.log("JSON Web Token", token.email)
             const data = await prisma.user.findUnique({
                 where: {
                     //@ts-ignore
