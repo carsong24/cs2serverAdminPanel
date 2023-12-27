@@ -65,8 +65,8 @@ export default function Navbar() {
     
   }
 
-  const handleLogin = async () => {
-
+  const handleLogin = async (e) => {
+    e.preventDefault()
     const user: {username: string, password: string} = {
       username: email,
       password: pass
