@@ -14,8 +14,16 @@ export default async function CreateUser(req: NextApiRequest, res: NextApiRespon
     const data: User = req.body
 
     const addUser = async (user: any) => {
+        console.log(user)
         try {
-            const createUser = await prisma.user.create({data: user})
+            const createUser = await prisma.user.create({data: {
+                name: user.name,
+                email: user.email,
+                //@ts-ignore
+                posts: [],
+                password: user
+            }})
+            console.log(createUser)
             return {code: "", type: [""], response: createUser} as unknown
         } catch (e) {
             if (e instanceof PrismaClientKnownRequestError) {
@@ -42,6 +50,7 @@ export default async function CreateUser(req: NextApiRequest, res: NextApiRespon
                 }
         
                 test = await addUser(newUser) as dberror
+                console.log(test, "HERE")
                 if (test?.code == "P2002") {
                     console.log(test?.code)
                     return {success: false, message: "Email already in use."}

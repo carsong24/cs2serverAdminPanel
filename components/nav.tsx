@@ -101,9 +101,6 @@ export default function Navbar() {
     return (
         <>
             <Box display={"flex"}>
-                <Button variant="outlined" onClick={handleAddOpen} sx={{padding: 1, margin: 2}}>
-                    Add User
-                </Button>
                 {status !== "authenticated" && (
                 <Button variant="outlined" onClick={handleLoginOpen} sx={{padding: 1, margin: 2}}>
                     Login
@@ -113,9 +110,6 @@ export default function Navbar() {
                     <>
                     <Button variant="contained" sx={{padding: 1, margin: 2, position: "fixed", top: 2, right: 15}} onClick={() => router.push('/profile')}>
                         {session.user?.email ? session.user?.email : ""}
-                    </Button>
-                    <Button variant="outlined"  sx={{padding: 1, margin: 2}}>
-                        Create Post
                     </Button>
                     <Button variant="outlined" onClick={handleLogOut}  sx={{ padding: 1, margin: 2 }}>
                         LogOut
