@@ -9,19 +9,18 @@ export default async function csComp(req: NextApiRequest, res: NextApiResponse) 
     try {
            const serv = await rcon
            serv.reconnect()
-            //@ts-ignore
-            const response = await serv.exec(`${command}`).then(test => {
-                console.log(test)
+           //TODO - Fix this type error
+           //@ts-ignore
+            const response = await serv.exec(`${command}`).then((res) => {
+                console.log(res)
                 serv.reconnect()
             }) 
     
     } catch (err) {
-        console.log(err, "HERE")
+        console.log(err)
     }
 
-    
-
-    return res.status(200).json({message: "testing"})
+    return res.status(200).json({message: "always return"})
 }
 
 
