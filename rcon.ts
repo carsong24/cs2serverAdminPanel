@@ -5,7 +5,7 @@ const {RCON} = require('@fabricio-191/valve-server-query');
 
 
  const rcon = RCON({
-    ip: '107.192.217.68',
+    ip: '192.168.1.245',
     port: 27015, //RCON port
     password: 'mink',
     timeout: 5000,

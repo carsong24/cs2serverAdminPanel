@@ -1,8 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { rcon } from "../../../rcon";
-import { getToken } from "next-auth/jwt";
-
-const {RCON} = require('@fabricio-191/valve-server-query');
 
 
 export default async function csComp(req: NextApiRequest, res: NextApiResponse) {
@@ -10,8 +7,6 @@ export default async function csComp(req: NextApiRequest, res: NextApiResponse) 
     const { command } = req.query
     
     try {
-        const token = await getToken({ req })
-        if (token) {
            const serv = await rcon
            serv.reconnect()
             //@ts-ignore
@@ -19,8 +14,6 @@ export default async function csComp(req: NextApiRequest, res: NextApiResponse) 
                 console.log(test)
                 serv.reconnect()
             }) 
-        }
-
     
     } catch (err) {
         console.log(err, "HERE")
