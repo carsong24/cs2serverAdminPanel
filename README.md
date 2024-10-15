@@ -29,4 +29,16 @@ Edit index.tsx to change map names as well as config names.
 
 Edit rcon.ts file to reflect your server details.
 
-There is also a docker file included for anyone interested in that. I'm personally running this on an unraid server.
+-------------------------
+Using with docker
+
+  There is a docker file included for anyone interested in that. I'm personally running this on an unraid server.
+  
+  docker pull cgar24/cs2-server-panel:latest
+  
+  required environment variables: 
+      - RCON_HOST
+      - RCON_PASS
+      - RCON_PORT
+  
+  alternatively you can simply go manually change these in the rcon.ts file.
