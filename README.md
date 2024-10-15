@@ -10,11 +10,7 @@ Simple Rcon admin panel for cs2 built with nextjs.
 
 -------------------------
 
-Very simple for now. Simply just hosts the app locally on port 3000.
-
-  - cs2 server commands you probably want to know, Figured these are probably all anyone needs for this.
-
---------------------------
+cs2 server commands you probably want to know, Figured these are probably all anyone needs for this.
 
   - executing configs - "exec configname"
   - changing map - "changelevel mapname"
@@ -24,7 +20,6 @@ Very simple for now. Simply just hosts the app locally on port 3000.
 Using Workshop Maps
 
   - For workshop maps you use frequently you can add them to the workshop map list in the index.tsx file.
-    
   - workshop map ids can be found at the end of the link to a workshop item
   - ie: https://steamcommunity.com/sharedfiles/filedetails/?id=3289507717
 
@@ -32,4 +27,4 @@ Using Workshop Maps
 
 Edit index.tsx to change map names as well as config names.
 
-Edit the rcon.ts file to reflect your server details.
+Edit rcon.ts file to reflect your server details.
