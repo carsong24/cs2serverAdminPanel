@@ -29,4 +29,4 @@ Edit index.tsx to change map names as well as config names.
 
 Edit rcon.ts file to reflect your server details.
 
-There is also a docker file included for anyone interested in that.
+There is also a docker file included for anyone interested in that. I'm personally running this on an unraid server.
