@@ -20,7 +20,6 @@ Very simple for now. Simply just hosts the app locally on port 3000.
   - using workshop maps - "host_workshop_map mapid"
 
   - workshop map ids can be found at the end of the link to a workshop item
-                                                               \/\/\/\/\/
   - ie: https://steamcommunity.com/sharedfiles/filedetails/?id=3289507717
 
 Edit index.tsx to change map names as well as config names.
