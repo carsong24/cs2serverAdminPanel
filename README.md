@@ -28,3 +28,5 @@ Using Workshop Maps
 Edit index.tsx to change map names as well as config names.
 
 Edit rcon.ts file to reflect your server details.
+
+There is also a docker file included for anyone interested in that.
