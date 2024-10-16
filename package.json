@@ -12,11 +12,13 @@
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@fabricio-191/valve-server-query": "^4.1.9",
+    "@fontsource-variable/sora": "^5.1.0",
     "@mui/material": "^5.15.1",
     "date-fns": "^3.0.6",
     "next": "14.0.4",
     "react": "^18",
     "react-dom": "^18",
+    "react-icons": "^5.3.0",
     "srcds-rcon": "^2.2.1"
   },
   "devDependencies": {
