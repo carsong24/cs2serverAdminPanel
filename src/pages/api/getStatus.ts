@@ -13,11 +13,7 @@ export default async function csComp(req: NextApiRequest, res: NextApiResponse) 
           })
 
         //@ts-ignore
-        const serverData = await serv.getInfo().then((res) => {
-            if (res) {
-              return res  
-            }
-        })
+        const serverData = await serv.getInfo()
 
         const newData = {
             map: serverData?.map,
