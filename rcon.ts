@@ -1,5 +1,5 @@
 
-const {Server, RCON } = require('@fabricio-191/valve-server-query');
+const { RCON } = require('@fabricio-191/valve-server-query');
 
  const rcon = RCON({
     ip: process.env.RCON_HOST,
@@ -10,11 +10,6 @@ const {Server, RCON } = require('@fabricio-191/valve-server-query');
     enableWarns: true,
   });
 
-  const serverMain = Server({
-    ip: process.env.RCON_HOST,
-    port: 27015
-  })
 
-
-  export { rcon, serverMain }
+  export { rcon }
 

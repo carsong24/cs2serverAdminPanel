@@ -1,18 +1,23 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { serverMain } from "../../../rcon";
+const {Server, RCON } = require('@fabricio-191/valve-server-query');
 
 
 export default async function csComp(req: NextApiRequest, res: NextApiResponse) {
     
     try {
-        const servInfo = await serverMain
+
+        const serv = await Server({
+            ip: process.env.RCON_HOST,
+            port: 27015,
+            timeout: 3000,
+          })
 
         //@ts-ignore
-        const serverData = await servInfo.getInfo().then((res) => {
-            return res
+        const serverData = await serv.getInfo().then((res) => {
+            if (res) {
+              return res  
+            }
         })
-
-        console.log(serverData)
 
         const newData = {
             map: serverData?.map,
@@ -20,6 +25,8 @@ export default async function csComp(req: NextApiRequest, res: NextApiResponse) 
             serverName: serverData?.name,
             vacEnabled: serverData?.VAC
         }
+
+        console.log(newData)
 
         return res.status(200).json({success: true, data: newData})
     
