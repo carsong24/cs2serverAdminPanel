@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { rcon, serverMain } from "../../../rcon";
+import { rcon } from "../../../rcon";
 
 
 export default async function csComp(req: NextApiRequest, res: NextApiResponse) {
