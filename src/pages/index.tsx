@@ -12,7 +12,7 @@ export default function Home() {
   const [cmd, setCmd] = useState('')
   const [customMap, setCustomMap] = useState('')
   const [responseMessage, setResponseMessage] = useState('')
-  const [serverData, setServerData] = useState<{map: string, players: {online: number, max: number, bots: number}, serverName: string, vacEnabled: boolean}>({map: "", players: {online: 0, max: 0, bots: 0}, serverName: "", vacEnabled: false})
+  const [serverData, setServerData] = useState<{map: string, players: {name: string, raw: {score: number, time: number}}[], serverName: string, vacEnabled: boolean}>({map: "", players: [{name: "", raw: {score: 0, time: 0}}], serverName: "", vacEnabled: false})
 
   const matches = useMediaQuery('(max-width:600px)')
 
@@ -20,7 +20,6 @@ export default function Home() {
     await fetch('api/getStatus')
     .then(async (res) => {
       const data = await res.json()
-      console.log(data)
       setServerData(data?.data)
     })
   }
@@ -104,7 +103,7 @@ export default function Home() {
             />
           )}
           </Box>
-          <Typography style={{fontFamily: "'Sora Variable', sans-serif", fontWeight: "bold", color: "green"}}>{serverData?.players?.online - serverData?.players?.bots} <span style={{color: "white", marginLeft: "6px"}}>Players Online</span></Typography>
+          <Typography style={{fontFamily: "'Sora Variable', sans-serif", fontWeight: "bold", color: "green"}}>{serverData?.players?.length} <span style={{color: "white", marginLeft: "6px"}}>Players Online</span></Typography>
           <Typography style={{fontFamily: "'Sora Variable', sans-serif", fontWeight: "bold"}}>Current Map: {serverData?.map}</Typography>
           <Button variant="text" onClick={() => getServerInfo()}><TbRefresh /></Button>
         </Box>

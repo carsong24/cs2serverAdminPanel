@@ -1,29 +1,25 @@
 import { NextApiRequest, NextApiResponse } from "next";
 const {Server, RCON } = require('@fabricio-191/valve-server-query');
+const { GameDig } = require('gamedig'); 
 
 
 export default async function csComp(req: NextApiRequest, res: NextApiResponse) {
     
     try {
 
-        const serv = await Server({
-            ip: process.env.RCON_HOST,
-            port: 27020,
-            timeout: 3000,
-            debug: true,
-          })
 
-        //@ts-ignore
-        const serverData = await serv.getInfo()
+        const gameData = await GameDig.query({
+            type: 'counterstrike2',
+            host: process.env.RCON_HOST,
+            port: 27015
+        })
 
         const newData = {
-            map: serverData?.map,
-            players: serverData?.players,
-            serverName: serverData?.name,
-            vacEnabled: serverData?.VAC
+            map: gameData?.map,
+            players: gameData?.players,
+            serverName: gameData?.name,
+            vacEnabled: true
         }
-
-        console.log(newData)
 
         return res.status(200).json({success: true, data: newData})
     
