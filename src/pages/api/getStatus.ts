@@ -10,6 +10,7 @@ export default async function csComp(req: NextApiRequest, res: NextApiResponse) 
             ip: process.env.RCON_HOST,
             port: 27015,
             timeout: 3000,
+            debug: true,
           })
 
         //@ts-ignore
