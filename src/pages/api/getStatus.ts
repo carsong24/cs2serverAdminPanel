@@ -8,7 +8,7 @@ export default async function csComp(req: NextApiRequest, res: NextApiResponse) 
 
         const serv = await Server({
             ip: process.env.RCON_HOST,
-            port: 27015,
+            port: 27020,
             timeout: 3000,
             debug: true,
           })
