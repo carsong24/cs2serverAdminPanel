@@ -3,4 +3,15 @@ const nextConfig = {
   reactStrictMode: true
 }
 
-module.exports = nextConfig
+module.exports = {
+ config: nextConfig,
+ images: {
+  remotePatterns: [
+    {
+      protocol: 'https',
+      hostname: 'steamuserimages-a.akamaihd.net',
+      pathname: '/ugc/**',
+    },
+  ],
+},
+}
