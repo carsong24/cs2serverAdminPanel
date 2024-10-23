@@ -10,10 +10,10 @@ services:
     depends_on:
       - postgres-db
     environment:
-      POSTGRES_HOST: postgres-db
       POSTGRES_USER: cgar
       POSTGRES_PASSWORD: password
       POSTGRES_DB: mydb
+      DATABASE_URL: postgresql://cgar:password@postgres-db:5432/mydb?schema=cs_panel
 
   postgres-db:
     image: postgres:14-alpine

@@ -1,10 +1,14 @@
 'use client'
 
-import { Flex, Icon, Skeleton, Text, Tooltip } from "@chakra-ui/react"
+import { Button, Flex, Icon, Skeleton, Text, Tooltip, useColorMode, useDisclosure, useMediaQuery, useToast } from "@chakra-ui/react"
+import { motion } from "framer-motion"
 import Image from "next/image"
 import { useEffect } from "react"
-import { FaCopy } from "react-icons/fa"
+import { FaCopy, FaPlus } from "react-icons/fa"
 import useSWR, { Fetcher } from "swr"
+import { IoIosSettings } from "react-icons/io"
+import { useRouter } from "next/router"
+import ServerModal from "./modals/addServerModal"
 
 export type Player = {
     adr: string,
@@ -42,26 +46,18 @@ const defaultMapNames = [
     {id: "3070284539", name: "Train", image: "de_train"},
   ]
 
-export default function ServerCard({server}: {server: any}) {
+export default function ServerCard({server, blank}: {server?: any, blank?: boolean}) {
 
-    const getImageString = () => {
-        const fetcher: Fetcher<string, string> = (...args) => fetch(...args).then(res => res.json())
-        const { data, error, isLoading } = useSWR('/api/getImage', fetcher, { refreshInterval: 10000 })
-        const url = data as unknown
-        return {data: url, loading: isLoading, err: error}
-      }
+    const serverDisclosure = useDisclosure()
+    const router = useRouter()
+    const toast = useToast()
+    const [isMobile] = useMediaQuery('(max-width: 680px)')
 
-    const imageUrl = getImageString() as {data: string, loading: boolean, err: any}
-
-    useEffect(() => {
-        console.log(server)
-        console.log(imageUrl?.data)
-    }, [server, imageUrl?.data])
+    const fontSize2 = isMobile ? "lg" : "xl"
+    const fontSize3 = isMobile ? "xl" : "2xl"
+    const fontSize4 = isMobile ? "2xl" : "3xl"
 
     const getImage = () => {
-        if (server?.status?.map == "aim_map") {
-            return imageUrl?.data
-        }
         if (hasConnection && defaultMapNames.map(obj => obj.id).includes(server?.status?.map)) {
             return `/mapImages/${server?.status?.map}.png`
         } else if (hasConnection && !defaultMapNames.map(obj => obj.id).includes(server?.status?.map)) {
@@ -72,39 +68,87 @@ export default function ServerCard({server}: {server: any}) {
     }
 
     const hasConnection = server?.status?.map
+    const name = server?.status?.serverName
 
   return (
-    <Flex position={"relative"} margin={2} width={"fit-content"} height={"full"} opacity={1}>
-      <Flex border={"3px solid white"} borderRadius={4}>
-       <Skeleton isLoaded={hasConnection}>
-           <Flex opacity={.4} height={"393px"} width={"700px"}>
-                <Image
-                    style={{objectFit: "cover"}}
-                    src={getImage()}
-                    sizes="1000px"
-                    fill
-                    alt={`Picture of ${getImage()}`}
-                />
-            </Flex> 
-        </Skeleton> 
-      </Flex>
-        
-      <Flex position={"absolute"} top={3} right={3} gap={2}>
-        <Text fontSize={"2xl"} fontWeight={"bold"}>Player Count: {server?.players?.length}</Text>
-      </Flex>
-      <Flex direction={"column"} position={"absolute"} top={3} left={3}>
-        <Text fontSize={"2xl"} fontWeight={"bold"}>Server: {hasConnection ? server?.status?.serverName : server?.server?.server_name}</Text>
-            <Flex justifyContent={"center"} alignItems={"center"} gap={2}>
-                <Text fontSize={"xl"} cursor={"default"}>{server?.server?.ip_address}:{server?.server?.port}</Text>
-                <Icon cursor={"pointer"} as={FaCopy} boxSize={4} />
-            </Flex>
-        <Text fontSize={"xl"}>Status: {hasConnection ? "Online" : "Offline"}</Text>
-      </Flex>
-      <Flex direction={"column"} position={"absolute"} bottom={3} left={3}>
-        <Text fontSize={"xl"}>{hasConnection ? server?.status?.map : ""}</Text>
-        <Text fontSize={"2xl"} fontWeight={"bold"}>{hasConnection ? "Current Map" : ""}</Text>
-      </Flex>
-      
-    </Flex>
+    <>
+    {!blank ? (
+        <Flex cursor={"pointer"} as={motion.div} whileHover={{scale: 1.02}} transition='0.1s linear' minHeight={"380px"} position={"relative"} borderRadius={"25px"} border={`4px solid #ECDFCC`} justifyContent={"center"} alignItems={"center"}>
+         <Flex flexDirection={"column"} zIndex={1}>
+           <Flex flexDirection={"column"} padding={5} position={"absolute"} top={1} left={1}>
+             <Text textShadow={"2px 1px 1px black"} fontSize={fontSize4} fontWeight={"bold"}>{hasConnection ? name : ""}</Text>
+             <Flex alignItems={"center"} justifyContent={"center"}>
+              <Text textShadow={"2px 1px 1px black"} fontSize={fontSize2}>{hasConnection ? `${server?.server?.ip_address}:${server?.server?.port}` : ""}</Text>
+              {hasConnection && (
+                <Button variant={"plain"} onClick={() => {
+                  try {
+                    navigator.clipboard.writeText(`connect ${server?.server?.ip_address}:${server?.server?.port}`)
+                    toast({
+                      title: 'Ip Copy.',
+                      description: "Ip successfully copied to clipboard.",
+                      status: 'success',
+                      duration: 3000,
+                      isClosable: true,
+                      variant: 'left-accent'
+                    })
+                  } catch {
+                    toast({
+                      title: 'Ip Copy.',
+                      description: "Error copying Ip to clipboard.",
+                      status: 'error',
+                      duration: 3000,
+                      isClosable: true,
+                      variant: 'left-accent'
+                    })
+                  }
+                }}>
+                  <Icon style={{cursor: "pointer"}} as={FaCopy}/> 
+                </Button>
+              )}
+             </Flex>
+           </Flex>
+           <Flex flexDirection={"column"} padding={5} position={"absolute"} bottom={1} left={1}>
+             <Text textShadow={"2px 1px 1px black"} fontSize={fontSize2}>{hasConnection ? server?.status?.map : ""}</Text>
+             <Text textShadow={"2px 1px 1px black"} fontSize={fontSize4} fontWeight={"bold"}>{hasConnection ? "Current Map" : ""}</Text> 
+           </Flex>
+           <Flex padding={5} position={"absolute"} top={1} right={1} justifyContent={"center"} alignItems={"center"} gap={2}>
+             <Text textShadow={"2px 1px 1px black"} fontSize={fontSize3} fontWeight={"bold"}>{hasConnection ? "Players Online: " : ""}</Text>
+             <Text textShadow={"2px 1px 1px black"} fontSize={fontSize3} fontWeight={"bold"} paddingTop={1}>{server?.players?.length}</Text>
+           </Flex>
+           <Flex padding={5} position={"absolute"} bottom={1} right={1} justifyContent={"center"} alignItems={"center"} gap={2}>
+            <Button variant={"plain"} onClick={() => {
+              router.push({
+                pathname: `/server/[serverid]`,
+                query: {serverid: server?.server?.server_id}
+              })
+            }}>
+              <Icon cursor={"pointer"} as={IoIosSettings}  boxSize={8}/>
+            </Button>
+           </Flex>
+         </Flex>
+         
+         <Flex opacity={.6} borderRadius={"4px"}>
+           <Image
+               style={{objectFit: "cover", minHeight: "380px", borderRadius: "20px"}}
+               src={getImage()}
+               sizes="1000px"
+               height={380}
+               width={680}
+               alt={`Picture of ${getImage()}`}
+             />
+         </Flex>
+       </Flex>
+    ) : (
+        <Flex as={motion.div} whileHover={{scale: 1.02}} transition='0.1s linear' cursor={"pointer"} minHeight={"380px"} position={"relative"} width={"100%"} height={"100%"} borderRadius={"25px"} border={`4px solid #ECDFCC`} justifyContent={"center"}>
+          <Button variant={"solid"} justifyContent={"center"} alignItems={"center"} display={"flex"} width={"100%"} height={"100%"} borderRadius={"20px"} gap={4} onClick={serverDisclosure.onOpen}> 
+              <Text fontSize={"4xl"} fontWeight={"bold"} color={"#ECDFCC"}>Add Server</Text>
+              <Icon as={FaPlus} boxSize={7} fill={"#ECDFCC"}/>
+          </Button>
+        </Flex>
+    )}
+    <ServerModal isOpen={serverDisclosure.isOpen} onOpen={serverDisclosure.onOpen} onClose={serverDisclosure.onClose}/>
+    </>
+    
   )
+
 }

@@ -28,6 +28,7 @@ ENV NODE_ENV production
 # ENV RCON_HOST="host/ip"
 # ENV RCON_PASS="rconpass"
 # ENV RCON_PORT="27015"
+ENV DATABASE_URL="postgresql://cgar:password@postgres-db:5432/mydb?schema=cs_panel"
 
 EXPOSE 3000
 

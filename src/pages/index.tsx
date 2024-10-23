@@ -1,13 +1,15 @@
 'use client'
 
-import { Flex, Grid, GridItem, SimpleGrid, Text } from "@chakra-ui/react"
+import { Flex, Grid, GridItem, Icon, SimpleGrid, Skeleton, Text, useDisclosure } from "@chakra-ui/react"
 import Image from "next/image"
 import { useEffect } from "react"
 import useSWR, { Fetcher } from "swr"
 import ServerCard from "../../components/serverCard"
 import { servers } from "@prisma/client"
+import { FaCopy } from "react-icons/fa"
+import { AnimatePresence, motion } from "framer-motion"
 
-export type Server = {
+export type ServerType = {
     server: servers,
     status: {
       map: string,
@@ -17,76 +19,79 @@ export type Server = {
 }
 
 export default function Home() {
+  
 
-  const getServerData = () => {
-    const fetcher: Fetcher<Server, string> = (...args) => fetch(...args).then(res => res.json())
-    const { data, error, isLoading } = useSWR('/api/getServers', fetcher, { refreshInterval: 5000 })
-    return {data: data, loading: isLoading, err: error}
-  }
+  const fetcher: Fetcher<ServerType[], string> = (...args) => fetch(...args).then(res => res.json())
+  const { data, error, isLoading } = useSWR('/api/getServers', fetcher, { refreshInterval: 5000 })
+  const mainData = {data: data, loading: isLoading, err: error}
 
-
-  const mainData = getServerData()
-
-  useEffect(() => {
-    console.log(mainData)
-  }, [mainData])
-
-  const configNames = [
-    "prac",
-    "comp",
-    "live",
-    "onevone"
-  ]
-
-  const playerTest = [
-    {name: "test", time: "10:45"},
-    {name: "test", time: "10:45"},
-    {name: "test", time: "10:45"},
-    {name: "test", time: "10:45"},
-    {name: "test", time: "10:45"},
-    {name: "test", time: "10:45"},
-    {name: "test", time: "10:45"},
-    {name: "test", time: "10:45"},
-    {name: "test", time: "10:45"},
-    {name: "test", time: "10:45"}
-  ]
-
-  const defaultMapNames = [
-    {id: "cs_italy", name: "Italy"},
-    {id: "cs_office", name: "Office"},
-    {id: "de_ancient", name: "Ancient"},
-    {id: "de_anubis", name: "Anubis"},
-    {id: "de_dust2", name: "Dust 2"},
-    {id: "de_inferno", name: "Inferno"},
-    {id: "de_mirage", name: "Mirage"},
-    {id: "de_nuke", name: "Nuke"},
-    {id: "de_overpass", name: "Overpass"},
-    {id: "de_vertigo", name: "Vertigo"},
-  ]
-
-  const workShopMaps = [
-    {id: "3084291314", name: "Aim Map", image: "de_aimmap"},
-    {id: "3073892687", name: "Season", image: "de_season"},
-    {id: "3070284539", name: "Train", image: "de_train"},
-  ]
-
-  //@ts-ignore
   const servers = mainData?.data?.map((server) => {
     return (
-      <GridItem colSpan={1}>
+      <GridItem key={server?.server?.server_id} colSpan={1} justifyItems={"center"} alignItems={"center"}>
         <ServerCard server={server}/>
       </GridItem>
     )
   })
 
+  const skeletonGridItem = () => {
+    return (
+      <GridItem minHeight={"380px"} colSpan={1} width={"100%"} height={"100%"} borderRadius={"4px"} border={"4px solid #ECDFCC"}>
+          <Skeleton isLoaded={!mainData?.loading} height={"100%"} borderRadius={"4px"}>
+          <Flex position={"relative"} borderRadius={"4px"} justifyContent={"center"} alignItems={"center"}>
+         <Flex flexDirection={"column"} zIndex={1}>
+           <Flex flexDirection={"column"} padding={5} position={"absolute"} top={1} left={1}>
+             <Text fontWeight={"bold"}></Text>
+             <Flex alignItems={"center"} gap={2}>
+              <Text ></Text>
+             </Flex>
+           </Flex>
+           <Flex flexDirection={"column"} padding={5} position={"absolute"} bottom={1} left={1}>
+             <Text ></Text>
+             <Text fontWeight={"bold"}></Text> 
+           </Flex>
+           <Flex padding={5} position={"absolute"} top={1} right={1} justifyContent={"center"} alignItems={"center"} gap={2}>
+             <Text fontWeight={"bold"}></Text>
+             <Text fontWeight={"bold"} paddingTop={1}></Text>
+           </Flex>
+         </Flex>
+         
+         <Flex opacity={.6}>
+           <Image
+               style={{objectFit: "cover"}}
+               src={'/mapImages/unknown.png'}
+               sizes="1000px"
+               height={380}
+               width={680}
+               alt={`Picture of '/mapImages/unknown'}`}
+             />
+         </Flex>
+       </Flex>
+          </Skeleton>   
+        </GridItem>
+    )
+
+  }
+
 
   return (
-   <Flex>
-
-    <SimpleGrid columns={2}>
-      {servers}
-    </SimpleGrid>
-
+   <Flex padding={2} justifyContent={"space-evenly"} width={"100%"} overflowX={"hidden"}>
+    {!mainData?.loading ? (
+      <SimpleGrid columns={{md: 1, xl: 2, xxl: 3}} gap={4} justifyContent={"center"}>
+        {servers}
+        <GridItem colSpan={1} width={"100%"} height={"100%"} justifyItems={"center"} alignItems={"center"}>
+              <ServerCard blank={true}/>
+        </GridItem>
+      </SimpleGrid>
+    ) : (
+      <Flex justifyContent={"center"} alignItems={"center"} flexDirection={"column"} gap={6}>
+        <SimpleGrid columns={{md: 1, xl: 2, xxl: 3}} gap={1} justifyContent={"center"}>
+          {skeletonGridItem()}
+          {skeletonGridItem()}
+          {skeletonGridItem()}
+        </SimpleGrid>
+      </Flex>
+      
+    )}
    </Flex>
   )
 }

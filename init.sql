@@ -5,6 +5,7 @@ CREATE TABLE cs_panel.servers (
     server_name VARCHAR(100) NOT NULL,
     ip_address VARCHAR(45) NOT NULL,
     port INTEGER NOT NULL,
+    rcon_pass VARCHAR(100),
     max_players INTEGER,
     game_mode VARCHAR(50),
     map VARCHAR(100),
@@ -27,12 +28,12 @@ CREATE TABLE cs_panel.players (
 
 CREATE TABLE cs_panel.server_config (
     config_id SERIAL PRIMARY KEY,
-    server_id INTEGER NOT NULL REFERENCES servers(server_id) ON DELETE CASCADE,
+    server_id INTEGER NOT NULL REFERENCES cs_panel.servers(server_id) ON DELETE CASCADE,
     config_name VARCHAR(100) NOT NULL,
     config_value TEXT NOT NULL,
     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX idx_server_ip_port ON servers (ip_address, port);
-CREATE INDEX idx_player_steam_id ON players (steam_id);
-CREATE INDEX idx_config_server_id ON server_config (server_id);
+CREATE INDEX idx_server_ip_port ON cs_panel.servers (ip_address, port);
+CREATE INDEX idx_player_steam_id ON cs_panel.players (steam_id);
+CREATE INDEX idx_config_server_id ON cs_panel.server_config (server_id);

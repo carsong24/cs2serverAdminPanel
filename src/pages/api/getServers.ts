@@ -9,6 +9,7 @@ const prisma = new PrismaClient()
 export default async function getServers(req: NextApiRequest, res: NextApiResponse) {
 
     try {
+
         const servers = await prisma.servers.findMany()
 
         const serverList = []
@@ -16,10 +17,32 @@ export default async function getServers(req: NextApiRequest, res: NextApiRespon
         for (const server of servers) {
 
             const serverPlayers = await getServerPlayers(server?.ip_address, server?.port, "mink")
-            const serverStatus = await getServerStatus(server?.ip_address, server?.port)
+            const serverStatus = await getServerStatus(server?.ip_address, server?.port) as {map: string, serverName: string, vacEnabled: boolean}
+
+            if (serverStatus?.serverName != server?.server_name) {
+                await prisma.servers.update({
+                    where: {
+                        server_id: server?.server_id,
+                    },
+                    data: {
+                        server_name: serverStatus?.serverName
+                    }
+                })
+            }
+            if (serverStatus?.map != server?.map) {
+                await prisma.servers.update({
+                    where: {
+                        server_id: server?.server_id,
+                    },
+                    data: {
+                        map: serverStatus?.map
+                    }
+                })
+            }
             
             serverList.push({server: server, players: serverPlayers, status: serverStatus})
         }
+        await prisma.$disconnect()
         return res.status(200).json(serverList)
     } catch (err) {
         console.log(err, "err")
@@ -44,7 +67,7 @@ const getServerStatus = async (host: string, port: number) => {
 
         return newData
     } catch (err) {
-        console.log(err, "err")
+        console.log(err, "err 1")
         return err
     }
 
@@ -58,7 +81,7 @@ const getServerPlayers = async (host: string, port: number, rcon_pass: string) =
             ip: host,
             port: port,
             password: rcon_pass,
-            timeout: 5000,
+            timeout: 1000,
           })
 
         const serv = await rcon
@@ -66,9 +89,11 @@ const getServerPlayers = async (host: string, port: number, rcon_pass: string) =
 
         const players = parseCS2Status(data)
 
+        await serv.destroy()
+
         return players
     } catch (err) {
-        console.log(err, "err")
+        console.log(err, "err 2")
         return err
     }
 }

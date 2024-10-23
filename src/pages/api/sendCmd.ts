@@ -3,21 +3,23 @@ const { RCON } = require('@fabricio-191/valve-server-query');
 
 export default async function csComp(req: NextApiRequest, res: NextApiResponse) {
 
-    const { command } = req.query
-    
+    const { cmd, server } = JSON.parse(req.body)
+
     try {
 
         const rcon = RCON({
-            ip: process.env.RCON_HOST,
-            port: process.env.RCON_PORT ? +process.env.RCON_PORT : 27015,
-            password: process.env.RCON_PASS,
+            ip: server?.ip_address,
+            port: server?.port,
+            password: server?.rcon_pass,
             timeout: 5000,
             debug: true,
             enableWarns: true,
           })
 
         const serv = await rcon
-        const data = await serv.exec(`${command}`).then((res: any) => {return res})
+        const data = await serv.exec(`${cmd}`).then((res: any) => {return res})
+
+        await serv.destroy()
 
         return res.status(200).json({success: true, data: data})
     } catch (err) {

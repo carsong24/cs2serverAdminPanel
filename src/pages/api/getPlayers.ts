@@ -18,9 +18,6 @@ export default async function getPlayers(req: NextApiRequest, res: NextApiRespon
         const serv = await rcon
         const data = await serv.exec(`status`).then((res: any) => {return res})
 
-
-        console.log(data)
-
         const players = parseCS2Status(data)
 
         return res.status(200).json(players)
